@@ -1,5 +1,2 @@
-Computers, Sound, and Music — Spring 2020
-
-Final Project
-
+Computers, Sound, and Music Final Project — Spring 2020
 Satvir Singh & David Hogan
