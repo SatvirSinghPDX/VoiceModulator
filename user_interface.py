@@ -20,6 +20,7 @@ stopIcon = PhotoImage(file="stop.png")
 counter = 28800
 running = False
 
+
 def counter_label(label):
     def count():
         if running:
@@ -43,6 +44,7 @@ def counter_label(label):
 
 # start function of the stopwatch
 
+
 def Start(label):
     global running
     running = True
@@ -52,6 +54,7 @@ def Start(label):
 
 # Stop function of the stopwatch
 
+
 def Stop():
     global running
     startButton['state'] = 'normal'
@@ -59,6 +62,7 @@ def Stop():
     running = False
 
 # Reset function of the stopwatch
+
 
 def Reset(label):
     global counter
@@ -75,7 +79,9 @@ def Reset(label):
 
 # stopwatch label
 
-label = tk.Label(app, text="00:00:00", fg="white", font="Verdana 30 bold", bg="black")
+
+label = tk.Label(app, text="00:00:00", fg="white",
+                 font="Verdana 30 bold", bg="black")
 
 # creation of start listening, stop listening, and reset buttons
 
