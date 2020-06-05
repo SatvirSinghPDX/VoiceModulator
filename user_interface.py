@@ -111,7 +111,7 @@ def effect3():
 
     frame_per_sec = wr.getframerate() // 20
     file_sz = int(wr.getnframes() / frame_per_sec)
-    shift = 500 // 250
+    shift = 4000 // 150
 
     for num in range(file_sz):
         data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
