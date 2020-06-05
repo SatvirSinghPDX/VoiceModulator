@@ -4,6 +4,12 @@ import tkinter as tk
 import tkinter.font as tkFont
 from tkinter import PhotoImage
 from datetime import datetime
+import numpy as np
+import playsound as ps
+import wave as wv
+import soundfile as sf
+import pyaudio
+import os
 
 # set UI window parameters
 
@@ -17,6 +23,137 @@ app.configure(bg='black')
 startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
+
+def effect1():
+    wr = wv.open('output.wav', 'r')
+    ww = wv.open('effect1.wav', 'w')
+
+    par = list(wr.getparams())
+    ww.setparams(par)
+
+    frame_per_sec = wr.getframerate() // 20
+    file_sz = int(wr.getnframes() / frame_per_sec)
+    shift = 100 // 20
+
+    for num in range(file_sz):
+        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
+        left = data[0::2]
+        right = data[1::2]
+        # Take DFT
+        left_freq = np.fft.rfft(left)
+        right_freq = np.fft.rfft(right)
+        # Scale It Up or Down
+        left_freq = np.roll(left_freq, shift)
+        right_freq = np.roll(right_freq, shift)
+        left_freq[0:shift] = 0
+        right_freq[0:shift] = 0
+        # Take inverse DFT
+        left = np.fft.irfft(left_freq)
+        right = np.fft.irfft(right_freq)
+        # Put it altogether
+        sig = np.column_stack((left, right)).ravel().astype(np.int16)
+        ww.writeframes(sig.tostring())
+
+    wr.close()
+    ww.close()
+
+    ps.playsound('effect1.wav')
+
+    '''if os.path.exists("effect1.wav"):
+        os.remove("effect1.wav")
+        print("effect 1 removed")
+    else:
+        print("The file does not exist")'''
+
+
+def effect2():
+    wr = wv.open('output.wav', 'r')
+    ww = wv.open('effect2.wav', 'w')
+
+    par = list(wr.getparams())
+    ww.setparams(par)
+
+    frame_per_sec = wr.getframerate() // 20
+    file_sz = int(wr.getnframes() / frame_per_sec)
+    shift = 1000 // 100
+
+    for num in range(file_sz):
+        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
+        left = data[0::2]
+        right = data[1::2]
+        # Take DFT
+        left_freq = np.fft.rfft(left)
+        right_freq = np.fft.rfft(right)
+        # Scale It Up or Down
+        left_freq = np.roll(left_freq, shift)
+        right_freq = np.roll(right_freq, shift)
+        left_freq[0:shift] = 0
+        right_freq[0:shift] = 0
+        # Take inverse DFT
+        left = np.fft.irfft(left_freq)
+        right = np.fft.irfft(right_freq)
+        # Put it altogether
+        sig = np.column_stack((left, right)).ravel().astype(np.int16)
+        ww.writeframes(sig.tostring())
+
+    wr.close()
+    ww.close()
+
+    ps.playsound('effect2.wav')
+
+
+def effect3():
+    wr = wv.open('output.wav', 'r')
+    ww = wv.open('effect3.wav', 'w')
+
+    par = list(wr.getparams())
+    ww.setparams(par)
+
+    frame_per_sec = wr.getframerate() // 20
+    file_sz = int(wr.getnframes() / frame_per_sec)
+    shift = 500 // 250
+
+    for num in range(file_sz):
+        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
+        left = data[0::2]
+        right = data[1::2]
+        # Take DFT
+        left_freq = np.fft.rfft(left)
+        right_freq = np.fft.rfft(right)
+        # Scale It Up or Down
+        left_freq = np.roll(left_freq, shift)
+        right_freq = np.roll(right_freq, shift)
+        left_freq[0:shift] = 0
+        right_freq[0:shift] = 0
+        # Take inverse DFT
+        left = np.fft.irfft(left_freq)
+        right = np.fft.irfft(right_freq)
+        # Put it altogether
+        sig = np.column_stack((left, right)).ravel().astype(np.int16)
+        ww.writeframes(sig.tostring())
+
+    wr.close()
+    ww.close()
+
+    ps.playsound('effect3.wav')
+
+
+def effect4():
+    data, fs = sf.read('output.wav')
+    delay = .25
+    gain = .75
+
+    delay_index = int(delay * fs)
+    output = [0] * len(data)
+
+    for i in range(0, len(data)):
+        output[i] = data[i][0] + gain * data[i - delay_index][0]
+
+    print(output)
+    sf.write('effect4.wav', output, fs)
+    ps.playsound('effect4.wav')
+
+
 counter = 28800
 running = False
 
@@ -26,7 +163,7 @@ def counter_label(label):
         if running:
             global counter
 
-            # To manage the intial delay.
+            # To manage the initial delay.
             if counter == 28800:
                 display = "Starting..."
             else:
@@ -69,7 +206,7 @@ def Reset(label):
     counter = 28800
 
     # If rest is pressed after pressing stop.
-    if running == False:
+    if not running:
         resetButton['state'] = 'disabled'
         label['text'] = '00:00:00'
 
@@ -83,10 +220,69 @@ def Reset(label):
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
 
+
+def record():
+    chunk = 1024
+    sample_format = pyaudio.paInt16  # 16 bits per sample
+    channels = 2
+    fs = 44100  # Record at 44100 samples per second
+    seconds = 5
+    filename = "output.wav"
+
+    p = pyaudio.PyAudio()  # Create an interface to PortAudio
+
+    print('Started listening...')
+
+    stream = p.open(format=sample_format,
+                    channels=channels,
+                    rate=fs,
+                    frames_per_buffer=chunk,
+                    input=True)
+
+    frames = []  # Initialize array to store frames
+
+    # Store data in chunks for 5 seconds
+    for i in range(0, int(fs / chunk * seconds)):
+        data = stream.read(chunk)
+        frames.append(data)
+
+    # Stop and close the stream
+    stream.stop_stream()
+    stream.close()
+    # Terminate the PortAudio interface
+    p.terminate()
+
+    print('Stopped listening.')
+
+    # Save the recorded data as a WAV file
+    wf = wv.open(filename, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(p.get_sample_size(sample_format))
+    wf.setframerate(fs)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+    ps.playsound(filename)
+
+#def startMessage():
+    #print("Started listening...")
+
+def startWrapper():
+    Start(label)
+    #startMessage()
+    #record()
+
+def stopMessage():
+    print("Stopped listening")
+
+'''def stopWrapper():
+    Stop()
+    stopMessage()'''
+
 # creation of start listening, stop listening, and reset buttons
 
+
 startButton = tk.Button(app,
-                        command=lambda: Start(label),
+                        command=lambda: [startWrapper(), record()],
                         image=startIcon,
                         bg="black",
                         activebackground="black",
@@ -104,13 +300,13 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Effect 1")
+effect1 = tk.Button(app, text="Effect 1", command=effect1)
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Effect 2")
+effect2 = tk.Button(app, text="Effect 2", command=effect2)
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Effect 3")
+effect3 = tk.Button(app, text="Effect 3", command=effect3)
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Effect 4")
+effect4 = tk.Button(app, text="Effect 4", command=effect4)
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
 effect5 = tk.Button(app, text="Effect 5")
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -132,5 +328,7 @@ label.pack(side=tk.TOP)
 startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 resetButton.pack(side=tk.BOTTOM)
+
+
 
 app.mainloop()
