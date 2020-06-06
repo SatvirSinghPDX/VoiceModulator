@@ -12,6 +12,7 @@ import playsound as ps
 import pyaudio
 import soundfile as sf
 from randomstr import randomstr
+from pydub import AudioSegment
 
 warnings.simplefilter("ignore", DeprecationWarning)
 
@@ -54,7 +55,7 @@ effect5['font'] = myFont
 effect6 = tk.Button(app, text="Slow-Mo", width=9, command=lambda: [ps.playsound(effect6_file)])
 effect6.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
 effect6['font'] = myFont
-effect7 = tk.Button(app, text="Effect 7", width=9)
+effect7 = tk.Button(app, text="Reverse", width=9, command=lambda: [ps.playsound(effect7_file)])
 effect7.place(relx=0.4, rely=0.7, anchor=tk.CENTER)
 effect7['font'] = myFont
 effect8 = tk.Button(app, text="Effect 8",  width=9)
@@ -84,7 +85,7 @@ effect3_file = ''
 effect4_file = ''
 effect5_file = ''
 effect6_file = ''
-
+effect7_file = ''
 
 def delete_file(filename):
     if os.path.exists(filename):
@@ -259,6 +260,14 @@ def effect_6(filename):
     wf.close()
 
 
+def effect_7(filename):
+    loop = AudioSegment.from_wav(filename)
+    reversed = loop.reverse()
+    global effect7_file
+    effect7_file = randomstr(length=10) + '.wav'
+    reversed.export(effect7_file, format="wav")
+
+
 counter = 28800
 running = False
 
@@ -387,6 +396,7 @@ def start_record():
     effect_4(filename)
     effect_5(filename)
     effect_6(filename)
+    effect_7(filename)
 
 
 def stop_record():
