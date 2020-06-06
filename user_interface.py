@@ -1,18 +1,17 @@
 # !/usr/bin/env python3
 
+import os
 import tkinter as tk
-from tkinter import PhotoImage
+import warnings
+import wave as wv
 from datetime import datetime
+from tkinter import PhotoImage
+
 import numpy as np
 import playsound as ps
-import wave as wv
-import soundfile as sf
 import pyaudio
-import os
-import warnings
+import soundfile as sf
 from randomstr import randomstr
-import rand
-import string
 
 warnings.simplefilter("ignore", DeprecationWarning)
 
@@ -27,7 +26,6 @@ app.configure(bg='black')
 
 startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
-
 
 # creation and placement of effect buttons
 
@@ -50,6 +48,7 @@ effect8.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
 effect9 = tk.Button(app, text="Effect 9", width=9)
 effect9.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
 
+# disable the effect buttons when initially running the app
 
 effect1['state'] = 'disabled'
 effect2['state'] = 'disabled'
@@ -61,7 +60,6 @@ effect7['state'] = 'disabled'
 effect8['state'] = 'disabled'
 effect9['state'] = 'disabled'
 
-
 effect1_file = ''
 effect2_file = ''
 effect3_file = ''
@@ -69,16 +67,18 @@ effect4_file = ''
 effect5_file = ''
 effect6_file = ''
 
+
 def delete_file(filename):
     if os.path.exists(filename):
         os.remove(filename)
     else:
-        print(filename+' DNE')
+        print(filename + ' DNE')
+
 
 def effect_1(filename):
     wr = wv.open(filename, 'r')
     global effect1_file
-    effect1_file = randomstr(length=10)+'.wav'
+    effect1_file = randomstr(length=10) + '.wav'
     ww = wv.open(effect1_file, 'w')
 
     par = list(wr.getparams())
@@ -115,7 +115,7 @@ def effect_2(filename):
     wr = wv.open(filename, 'r')
 
     global effect2_file
-    effect2_file = randomstr(length=10)+'.wav'
+    effect2_file = randomstr(length=10) + '.wav'
     ww = wv.open(effect2_file, 'w')
 
     par = list(wr.getparams())
@@ -152,7 +152,7 @@ def effect_3(filename):
     wr = wv.open(filename, 'r')
 
     global effect3_file
-    effect3_file = randomstr(length=10)+'.wav'
+    effect3_file = randomstr(length=10) + '.wav'
     ww = wv.open(effect3_file, 'w')
 
     par = list(wr.getparams())
@@ -190,7 +190,7 @@ def effect_4(filename):
     delay = .25
     gain = .75
     global effect4_file
-    effect4_file = randomstr(length=10)+'.wav'
+    effect4_file = randomstr(length=10) + '.wav'
 
     delay_index = int(delay * fs)
     output = [0] * len(data)
@@ -212,7 +212,7 @@ def effect_5(filename):
     signal = spf.readframes(-1)
 
     global effect5_file
-    effect5_file = randomstr(length=10)+'.wav'
+    effect5_file = randomstr(length=10) + '.wav'
 
     wf = wv.open(effect5_file, 'wb')
     wf.setnchannels(CHANNELS)
@@ -231,8 +231,7 @@ def effect_6(filename):
     RATE = spf.getframerate()
     signal = spf.readframes(-1)
     global effect6_file
-    effect6_file = randomstr(length=10)+'.wav'
-
+    effect6_file = randomstr(length=10) + '.wav'
 
     wf = wv.open(effect6_file, 'wb')
     wf.setnchannels(CHANNELS)
@@ -270,7 +269,7 @@ def counter_label(label):
 
 # start function of the stopwatch
 
-def Start(label):
+def start(label):
     global running
     running = True
     counter_label(label)
@@ -278,18 +277,18 @@ def Start(label):
     stopButton['state'] = 'normal'
 
 
-# Stop function of the stopwatch
+# stop function of the stopwatch
 
-def Stop():
+def stop():
     global running
     startButton['state'] = 'normal'
     stopButton['state'] = 'disabled'
     running = False
 
 
-# Reset function of the stopwatch
+# reset function of the stopwatch
 
-def Reset(label):
+def reset(label):
     global counter
     counter = 28800
 
@@ -308,9 +307,49 @@ def Reset(label):
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
 
+st = 0
+
 
 # record voice function
-def record():
+
+def start_record():
+    # reset the timer
+    reset(label)
+    # start the timer
+    start(label)
+    global st
+    st = 1
+    frames = []
+    FORMAT = pyaudio.paInt16  # 16 bits per sample
+    CHANNELS = 2
+    RATE = 44100  # Record at 44100 samples per second
+    CHUNK = 3024
+
+    # Create an interface to PortAudio
+    p = pyaudio.PyAudio()
+    rand_str = randomstr(length=10, charset='alphanumeric', readable=False, capitalization=False)
+    filename = rand_str + ".wav"
+    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
+    while st == 1:
+        data = stream.read(CHUNK)
+        frames.append(data)
+        print("recording...")
+        app.update()
+
+    # Stop and close the stream
+    stream.close()
+
+    # Terminate the PortAudio interface
+    p.terminate()
+
+    # Save the recorded data as a WAV file
+    wf = wv.open(filename, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+    # enable the effect buttons when recording is finished
     effect1['state'] = 'normal'
     effect2['state'] = 'normal'
     effect3['state'] = 'normal'
@@ -320,46 +359,7 @@ def record():
     effect7['state'] = 'normal'
     effect8['state'] = 'normal'
     effect9['state'] = 'normal'
-    chunk = 1024
-    sample_format = pyaudio.paInt16  # 16 bits per sample
-    channels = 2
-    fs = 44100  # Record at 44100 samples per second
-    seconds = 5
-    rand_str = randomstr(length=10, charset='alphanumeric', readable=False, capitalization=False)
-    filename = rand_str + ".wav"
-
-    p = pyaudio.PyAudio()  # Create an interface to PortAudio
-
-    print('Started listening...')
-
-    stream = p.open(format=sample_format,
-                    channels=channels,
-                    rate=fs,
-                    frames_per_buffer=chunk,
-                    input=True)
-
-    frames = []  # Initialize array to store frames
-
-    # Store data in chunks for 5 seconds
-    for i in range(0, int(fs / chunk * seconds)):
-        data = stream.read(chunk)
-        frames.append(data)
-
-    # Stop and close the stream
-    stream.stop_stream()
-    stream.close()
-    # Terminate the PortAudio interface
-    p.terminate()
-
-    print('Stopped listening.')
-
-    # Save the recorded data as a WAV file
-    wf = wv.open(filename, 'wb')
-    wf.setnchannels(channels)
-    wf.setsampwidth(p.get_sample_size(sample_format))
-    wf.setframerate(fs)
-    wf.writeframes(b''.join(frames))
-    wf.close()
+    # play the recorded audio
     ps.playsound(filename)
 
     effect_1(filename)
@@ -370,16 +370,23 @@ def record():
     effect_6(filename)
 
 
+def stop_record():
+    # stop the timer
+    stop()
+    global st
+    st = 0
+
+
 # creation of start listening, stop listening, and reset buttons
 
 startButton = tk.Button(app,
-                        command=lambda: [Start(label), record()],
+                        command=lambda: [start_record()],
                         image=startIcon,
                         bg="black",
                         activebackground="black",
                         borderwidth=0)
 stopButton = tk.Button(app,
-                       command=Stop,
+                       command=lambda: [stop_record()],
                        image=stopIcon,
                        bg="black",
                        activebackground="black",
@@ -387,7 +394,7 @@ stopButton = tk.Button(app,
 resetButton = tk.Button(app,
                         text='Reset',
                         width=6,
-                        command=lambda: Reset(label))
+                        command=lambda: reset(label))
 
 # placement of stopwatch label
 
@@ -400,6 +407,3 @@ stopButton.pack(side=tk.RIGHT)
 resetButton.pack(side=tk.BOTTOM)
 
 app.mainloop()
-
-
-
