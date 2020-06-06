@@ -24,7 +24,7 @@ startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
 
-def effect1():
+def effect_1():
     wr = wv.open('output.wav', 'r')
     ww = wv.open('effect1.wav', 'w')
 
@@ -57,8 +57,10 @@ def effect1():
     wr.close()
     ww.close()
 
+    #ps.playsound('effect1.wav')
 
-def effect2():
+
+def effect_2():
     wr = wv.open('output.wav', 'r')
     ww = wv.open('effect2.wav', 'w')
 
@@ -91,8 +93,10 @@ def effect2():
     wr.close()
     ww.close()
 
+    #ps.playsound('effect2.wav')
 
-def effect3():
+
+def effect_3():
     wr = wv.open('output.wav', 'r')
     ww = wv.open('effect3.wav', 'w')
 
@@ -125,8 +129,10 @@ def effect3():
     wr.close()
     ww.close()
 
+    #ps.playsound('effect3.wav')
 
-def effect4():
+
+def effect_4():
     data, fs = sf.read('output.wav')
     delay = .25
     gain = .75
@@ -139,6 +145,7 @@ def effect4():
 
     print(output)
     sf.write('effect4.wav', output, fs)
+    #ps.playsound('effect4.wav')
 
 
 counter = 28800
@@ -166,6 +173,7 @@ def counter_label(label):
     # Triggering the start of the counter.
     count()
 
+
 # start function of the stopwatch
 
 def Start(label):
@@ -175,6 +183,7 @@ def Start(label):
     startButton['state'] = 'disabled'
     stopButton['state'] = 'normal'
 
+
 # Stop function of the stopwatch
 
 def Stop():
@@ -182,6 +191,7 @@ def Stop():
     startButton['state'] = 'normal'
     stopButton['state'] = 'disabled'
     running = False
+
 
 # Reset function of the stopwatch
 
@@ -198,10 +208,12 @@ def Reset(label):
     else:
         label['text'] = 'Starting...'
 
+
 # stopwatch label
 
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
+
 
 # record voice function
 
@@ -246,17 +258,11 @@ def record():
     wf.writeframes(b''.join(frames))
     wf.close()
     ps.playsound(filename)
+    effect_1()
+    effect_2()
+    effect_3()
+    effect_4()
 
-
-def startWrapper():
-    Start(label)
-    #startMessage()
-    #record()
-
-
-'''def stopWrapper():
-    Stop()
-    stopMessage()'''
 
 # creation of start listening, stop listening, and reset buttons
 
@@ -279,13 +285,13 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Effect 1", command=lambda: [effect1, ps.playsound('effect1.wav')])
+effect1 = tk.Button(app, text="Effect 1", command=lambda: [ps.playsound('effect1.wav')])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Effect 2", command=lambda: [effect2, ps.playsound('effect2.wav')])
+effect2 = tk.Button(app, text="Effect 2", command=lambda: [ps.playsound('effect2.wav')])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Effect 3", command=lambda: [effect3, ps.playsound('effect3.wav')])
+effect3 = tk.Button(app, text="Effect 3", command=lambda: [ps.playsound('effect3.wav')])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Effect 4", command=lambda: [effect4, ps.playsound('effect4.wav')])
+effect4 = tk.Button(app, text="Effect 4", command=lambda: [ps.playsound('effect4.wav')])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
 effect5 = tk.Button(app, text="Effect 5")
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -307,6 +313,5 @@ label.pack(side=tk.TOP)
 startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 resetButton.pack(side=tk.BOTTOM)
-
 
 app.mainloop()
