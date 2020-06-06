@@ -19,7 +19,7 @@ warnings.simplefilter("ignore", DeprecationWarning)
 # set UI window parameters
 
 app = tk.Tk()
-app.geometry("600x400")
+app.geometry("800x500")
 app.title("Voice Modulator")
 app.configure(bg='black')
 
@@ -348,23 +348,23 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Helium 1", width=8, command=lambda: [ps.playsound(effect1_file)])
+effect1 = tk.Button(app, text="Helium 1", width=9, command=lambda: [ps.playsound(effect1_file)])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Robot Voice", width=8, command=lambda: [ps.playsound(effect2_file)])
+effect2 = tk.Button(app, text="Robot Voice", width=9, command=lambda: [ps.playsound(effect2_file)])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Helium 3", width=8, command=lambda: [ps.playsound(effect3_file)])
+effect3 = tk.Button(app, text="Helium 3", width=9, command=lambda: [ps.playsound(effect3_file)])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Echo", width=8, command=lambda: [ps.playsound(effect4_file)])
+effect4 = tk.Button(app, text="Echo", width=9, command=lambda: [ps.playsound(effect4_file)])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
-effect5 = tk.Button(app, text="Chipmunk", width=8, command=lambda: [ps.playsound(effect5_file)])
+effect5 = tk.Button(app, text="Chipmunk", width=9, command=lambda: [ps.playsound(effect5_file)])
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-effect6 = tk.Button(app, text="Slow-Mo", width=8, command=lambda: [ps.playsound(effect6_file)])
+effect6 = tk.Button(app, text="Slow-Mo", width=9, command=lambda: [ps.playsound(effect6_file)])
 effect6.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
-effect7 = tk.Button(app, text="Effect 7", width=8)
+effect7 = tk.Button(app, text="Effect 7", width=9)
 effect7.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
-effect8 = tk.Button(app, text="Effect 8", width=8)
+effect8 = tk.Button(app, text="Effect 8", width=9)
 effect8.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
-effect9 = tk.Button(app, text="Effect 9", width=8)
+effect9 = tk.Button(app, text="Effect 9", width=9)
 effect9.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
 
 # placement of stopwatch label
