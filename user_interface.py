@@ -6,7 +6,7 @@ import warnings
 import wave as wv
 from datetime import datetime
 from tkinter import PhotoImage, messagebox
-
+import tkinter.font as font
 import numpy as np
 import playsound as ps
 import pyaudio
@@ -18,7 +18,7 @@ warnings.simplefilter("ignore", DeprecationWarning)
 # set UI window parameters
 
 app = tk.Tk()
-app.geometry("800x500")
+app.geometry("1000x500")
 app.title("Voice Modulator")
 app.configure(bg='black')
 
@@ -32,26 +32,37 @@ deleteWavFiles = tk.Button(app,
                            width=15,
                            command=lambda: remove_files())
 
+myFont = font.Font(family='Helvetica', size=11, weight='bold')
+
 # creation and placement of effect buttons
 
 effect1 = tk.Button(app, text="Helium 1", width=9, command=lambda: [ps.playsound(effect1_file)])
-effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
+effect1.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
+effect1['font'] = myFont
 effect2 = tk.Button(app, text="Robot Voice", width=9, command=lambda: [ps.playsound(effect2_file)])
-effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+effect2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+effect2['font'] = myFont
 effect3 = tk.Button(app, text="Helium 3", width=9, command=lambda: [ps.playsound(effect3_file)])
-effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
+effect3.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
+effect3['font'] = myFont
 effect4 = tk.Button(app, text="Echo", width=9, command=lambda: [ps.playsound(effect4_file)])
-effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
+effect4.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
+effect4['font'] = myFont
 effect5 = tk.Button(app, text="Chipmunk", width=9, command=lambda: [ps.playsound(effect5_file)])
-effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+effect5.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+effect5['font'] = myFont
 effect6 = tk.Button(app, text="Slow-Mo", width=9, command=lambda: [ps.playsound(effect6_file)])
-effect6.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
+effect6.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
+effect6['font'] = myFont
 effect7 = tk.Button(app, text="Effect 7", width=9)
-effect7.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
-effect8 = tk.Button(app, text="Effect 8", width=9)
-effect8.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+effect7.place(relx=0.4, rely=0.7, anchor=tk.CENTER)
+effect7['font'] = myFont
+effect8 = tk.Button(app, text="Effect 8",  width=9)
+effect8.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
+effect8['font'] = myFont
 effect9 = tk.Button(app, text="Effect 9", width=9)
-effect9.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
+effect9.place(relx=0.6, rely=0.7, anchor=tk.CENTER)
+effect9['font'] = myFont
 
 # disable the effect buttons when initially running the app
 
@@ -312,7 +323,7 @@ def reset(label):
 # stopwatch label
 
 label = tk.Label(app, text="00:00:00", fg="white",
-                 font="Verdana 30 bold", bg="black")
+                 font="Verdana 60 bold", bg="black")
 
 st = 0
 
