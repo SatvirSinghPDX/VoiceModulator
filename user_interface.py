@@ -10,6 +10,10 @@ import soundfile as sf
 import pyaudio
 import os
 import warnings
+from randomstr import randomstr
+import rand
+import string
+
 warnings.simplefilter("ignore", DeprecationWarning)
 
 # set UI window parameters
@@ -242,16 +246,15 @@ def Reset(label):
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
 
-
 # record voice function
-
 def record():
     chunk = 1024
     sample_format = pyaudio.paInt16  # 16 bits per sample
     channels = 2
     fs = 44100  # Record at 44100 samples per second
     seconds = 5
-    filename = "output.wav"
+    rand_str = randomstr(length=10, charset='alphanumeric', readable=False, capitalization=False)
+    filename = rand_str+".wav"
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
@@ -317,7 +320,7 @@ resetButton = tk.Button(app,
 
 effect1 = tk.Button(app, text="Helium 1", width=8, command=lambda: [ps.playsound('effect1.wav')])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Helium 2", width=8, command=lambda: [ps.playsound('effect2.wav')])
+effect2 = tk.Button(app, text="Robot Voice", width=8, command=lambda: [ps.playsound('effect2.wav')])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
 effect3 = tk.Button(app, text="Helium 3", width=8, command=lambda: [ps.playsound('effect3.wav')])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
