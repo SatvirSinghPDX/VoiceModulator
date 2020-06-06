@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 import tkinter as tk
 from tkinter import PhotoImage
@@ -28,10 +28,24 @@ app.configure(bg='black')
 startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
+effect1_file = ''
+effect2_file = ''
+effect3_file = ''
+effect4_file = ''
+effect5_file = ''
+effect6_file = ''
+
+def delete_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
+    else:
+        print(filename+' DNE')
 
 def effect_1(filename):
     wr = wv.open(filename, 'r')
-    ww = wv.open('effect1.wav', 'w')
+    global effect1_file
+    effect1_file = randomstr(length=10)+'.wav'
+    ww = wv.open(effect1_file, 'w')
 
     par = list(wr.getparams())
     ww.setparams(par)
@@ -65,7 +79,10 @@ def effect_1(filename):
 
 def effect_2(filename):
     wr = wv.open(filename, 'r')
-    ww = wv.open('effect2.wav', 'w')
+
+    global effect2_file
+    effect2_file = randomstr(length=10)+'.wav'
+    ww = wv.open(effect2_file, 'w')
 
     par = list(wr.getparams())
     ww.setparams(par)
@@ -99,7 +116,10 @@ def effect_2(filename):
 
 def effect_3(filename):
     wr = wv.open(filename, 'r')
-    ww = wv.open('effect3.wav', 'w')
+
+    global effect3_file
+    effect3_file = randomstr(length=10)+'.wav'
+    ww = wv.open(effect3_file, 'w')
 
     par = list(wr.getparams())
     ww.setparams(par)
@@ -135,6 +155,8 @@ def effect_4(filename):
     data, fs = sf.read(filename)
     delay = .25
     gain = .75
+    global effect4_file
+    effect4_file = randomstr(length=10)+'.wav'
 
     delay_index = int(delay * fs)
     output = [0] * len(data)
@@ -143,7 +165,7 @@ def effect_4(filename):
         output[i] = data[i][0] + gain * data[i - delay_index][0]
 
     print(output)
-    sf.write('effect4.wav', output, fs)
+    sf.write(effect4_file, output, fs)
 
 
 def effect_5(filename):
@@ -155,7 +177,10 @@ def effect_5(filename):
     RATE = spf.getframerate()
     signal = spf.readframes(-1)
 
-    wf = wv.open('effect5.wav', 'wb')
+    global effect5_file
+    effect5_file = randomstr(length=10)+'.wav'
+
+    wf = wv.open(effect5_file, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(SWIDTH)
     wf.setframerate(RATE * Change_RATE)
@@ -171,8 +196,11 @@ def effect_6(filename):
     spf = wv.open(filename, 'rb')
     RATE = spf.getframerate()
     signal = spf.readframes(-1)
+    global effect6_file
+    effect6_file = randomstr(length=10)+'.wav'
 
-    wf = wv.open('effect6.wav', 'wb')
+
+    wf = wv.open(effect6_file, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(SWIDTH)
     wf.setframerate(RATE * Change_RATE)
@@ -246,6 +274,7 @@ def Reset(label):
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
 
+
 # record voice function
 def record():
     chunk = 1024
@@ -254,7 +283,7 @@ def record():
     fs = 44100  # Record at 44100 samples per second
     seconds = 5
     rand_str = randomstr(length=10, charset='alphanumeric', readable=False, capitalization=False)
-    filename = rand_str+".wav"
+    filename = rand_str + ".wav"
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
@@ -289,6 +318,7 @@ def record():
     wf.writeframes(b''.join(frames))
     wf.close()
     ps.playsound(filename)
+
     effect_1(filename)
     effect_2(filename)
     effect_3(filename)
@@ -318,17 +348,17 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Helium 1", width=8, command=lambda: [ps.playsound('effect1.wav')])
+effect1 = tk.Button(app, text="Helium 1", width=8, command=lambda: [ps.playsound(effect1_file)])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Robot Voice", width=8, command=lambda: [ps.playsound('effect2.wav')])
+effect2 = tk.Button(app, text="Robot Voice", width=8, command=lambda: [ps.playsound(effect2_file)])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Helium 3", width=8, command=lambda: [ps.playsound('effect3.wav')])
+effect3 = tk.Button(app, text="Helium 3", width=8, command=lambda: [ps.playsound(effect3_file)])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Echo", width=8, command=lambda: [ps.playsound('effect4.wav')])
+effect4 = tk.Button(app, text="Echo", width=8, command=lambda: [ps.playsound(effect4_file)])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
-effect5 = tk.Button(app, text="Chipmunk", width=8, command=lambda: [ps.playsound('effect5.wav')])
+effect5 = tk.Button(app, text="Chipmunk", width=8, command=lambda: [ps.playsound(effect5_file)])
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-effect6 = tk.Button(app, text="Slow-Mo", width=8,  command=lambda: [ps.playsound('effect6.wav')])
+effect6 = tk.Button(app, text="Slow-Mo", width=8, command=lambda: [ps.playsound(effect6_file)])
 effect6.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
 effect7 = tk.Button(app, text="Effect 7", width=8)
 effect7.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
@@ -348,3 +378,6 @@ stopButton.pack(side=tk.RIGHT)
 resetButton.pack(side=tk.BOTTOM)
 
 app.mainloop()
+
+
+
