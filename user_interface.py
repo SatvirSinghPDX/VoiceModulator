@@ -5,7 +5,7 @@ import tkinter as tk
 import warnings
 import wave as wv
 from datetime import datetime
-from tkinter import PhotoImage
+from tkinter import PhotoImage, messagebox
 
 import numpy as np
 import playsound as ps
@@ -26,6 +26,11 @@ app.configure(bg='black')
 
 startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
+
+deleteWavFiles = tk.Button(app,
+                        text='Delete .wav files',
+                        width=15,
+                        command=lambda: remove_files())
 
 # creation and placement of effect buttons
 
@@ -59,6 +64,8 @@ effect6['state'] = 'disabled'
 effect7['state'] = 'disabled'
 effect8['state'] = 'disabled'
 effect9['state'] = 'disabled'
+
+deleteWavFiles['state'] = 'normal'
 
 effect1_file = ''
 effect2_file = ''
@@ -198,7 +205,7 @@ def effect_4(filename):
     for i in range(0, len(data)):
         output[i] = data[i][0] + gain * data[i - delay_index][0]
 
-    print(output)
+    #print(output)
     sf.write(effect4_file, output, fs)
 
 
@@ -294,7 +301,7 @@ def reset(label):
 
     # If rest is pressed after pressing stop.
     if not running:
-        resetButton['state'] = 'disabled'
+        #resetButton['state'] = 'disabled'
         label['text'] = '00:00:00'
 
     # If reset is pressed while the stopwatch is running.
@@ -317,6 +324,7 @@ def start_record():
     reset(label)
     # start the timer
     start(label)
+    deleteWavFiles['state'] = 'disabled'
     global st
     st = 1
     frames = []
@@ -391,10 +399,7 @@ stopButton = tk.Button(app,
                        bg="black",
                        activebackground="black",
                        borderwidth=0)
-resetButton = tk.Button(app,
-                        text='Reset',
-                        width=6,
-                        command=lambda: reset(label))
+
 
 # placement of stopwatch label
 
@@ -404,6 +409,21 @@ label.pack(side=tk.TOP)
 
 startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
-resetButton.pack(side=tk.BOTTOM)
+deleteWavFiles.pack(side=tk.BOTTOM)
+
+def remove_files():
+    directory = os.getcwd()
+
+    files_in_directory = os.listdir(directory)
+    filtered_files = [file for file in files_in_directory if file.endswith(".wav")]
+    for file in filtered_files:
+        path_to_file = os.path.join(directory, file)
+        os.remove(path_to_file)
+
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        app.destroy()
+
+app.protocol("WM_DELETE_WINDOW", on_closing)
 
 app.mainloop()
