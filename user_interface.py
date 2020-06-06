@@ -2,6 +2,7 @@
 
 import tkinter as tk
 import tkinter.font as tkFont
+import wave
 from tkinter import PhotoImage
 from datetime import datetime
 import numpy as np
@@ -57,8 +58,6 @@ def effect_1():
     wr.close()
     ww.close()
 
-    #ps.playsound('effect1.wav')
-
 
 def effect_2():
     wr = wv.open('output.wav', 'r')
@@ -92,8 +91,6 @@ def effect_2():
 
     wr.close()
     ww.close()
-
-    #ps.playsound('effect2.wav')
 
 
 def effect_3():
@@ -129,8 +126,6 @@ def effect_3():
     wr.close()
     ww.close()
 
-    #ps.playsound('effect3.wav')
-
 
 def effect_4():
     data, fs = sf.read('output.wav')
@@ -145,7 +140,23 @@ def effect_4():
 
     print(output)
     sf.write('effect4.wav', output, fs)
-    #ps.playsound('effect4.wav')
+
+
+def effect_5():
+    CHANNELS = 1
+    SWIDTH = 2
+    Change_RATE = 3.2
+
+    spf = wv.open('output.wav', 'rb')
+    RATE = spf.getframerate()
+    signal = spf.readframes(-1)
+
+    wf = wv.open('effect5.wav', 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(SWIDTH)
+    wf.setframerate(RATE * Change_RATE)
+    wf.writeframes(signal)
+    wf.close()
 
 
 counter = 28800
@@ -262,6 +273,7 @@ def record():
     effect_2()
     effect_3()
     effect_4()
+    effect_5()
 
 
 # creation of start listening, stop listening, and reset buttons
@@ -293,7 +305,7 @@ effect3 = tk.Button(app, text="Effect 3", command=lambda: [ps.playsound('effect3
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
 effect4 = tk.Button(app, text="Effect 4", command=lambda: [ps.playsound('effect4.wav')])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
-effect5 = tk.Button(app, text="Effect 5")
+effect5 = tk.Button(app, text="Effect 5", command=lambda: [ps.playsound('effect5.wav')])
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 effect6 = tk.Button(app, text="Effect 6")
 effect6.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
