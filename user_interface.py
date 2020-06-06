@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-import tkinter.font as tkFont
-import wave
 from tkinter import PhotoImage
 from datetime import datetime
 import numpy as np
@@ -11,6 +9,8 @@ import wave as wv
 import soundfile as sf
 import pyaudio
 import os
+import warnings
+warnings.simplefilter("ignore", DeprecationWarning)
 
 # set UI window parameters
 
@@ -159,6 +159,23 @@ def effect_5():
     wf.close()
 
 
+def effect_6():
+    CHANNELS = 1
+    SWIDTH = 2
+    Change_RATE = 1.5
+
+    spf = wv.open('output.wav', 'rb')
+    RATE = spf.getframerate()
+    signal = spf.readframes(-1)
+
+    wf = wv.open('effect6.wav', 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(SWIDTH)
+    wf.setframerate(RATE * Change_RATE)
+    wf.writeframes(signal)
+    wf.close()
+
+
 counter = 28800
 running = False
 
@@ -274,6 +291,7 @@ def record():
     effect_3()
     effect_4()
     effect_5()
+    effect_6()
 
 
 # creation of start listening, stop listening, and reset buttons
@@ -297,23 +315,23 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Effect 1", command=lambda: [ps.playsound('effect1.wav')])
+effect1 = tk.Button(app, text="Helium 1", width=8, command=lambda: [ps.playsound('effect1.wav')])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Effect 2", command=lambda: [ps.playsound('effect2.wav')])
+effect2 = tk.Button(app, text="Helium 2", width=8, command=lambda: [ps.playsound('effect2.wav')])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Effect 3", command=lambda: [ps.playsound('effect3.wav')])
+effect3 = tk.Button(app, text="Helium 3", width=8, command=lambda: [ps.playsound('effect3.wav')])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Effect 4", command=lambda: [ps.playsound('effect4.wav')])
+effect4 = tk.Button(app, text="Echo", width=8, command=lambda: [ps.playsound('effect4.wav')])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
-effect5 = tk.Button(app, text="Effect 5", command=lambda: [ps.playsound('effect5.wav')])
+effect5 = tk.Button(app, text="Chipmunk", width=8, command=lambda: [ps.playsound('effect5.wav')])
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-effect6 = tk.Button(app, text="Effect 6")
+effect6 = tk.Button(app, text="Slow-Mo", width=8,  command=lambda: [ps.playsound('effect6.wav')])
 effect6.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
-effect7 = tk.Button(app, text="Effect 7")
+effect7 = tk.Button(app, text="Effect 7", width=8)
 effect7.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
-effect8 = tk.Button(app, text="Effect 8")
+effect8 = tk.Button(app, text="Effect 8", width=8)
 effect8.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
-effect9 = tk.Button(app, text="Effect 9")
+effect9 = tk.Button(app, text="Effect 9", width=8)
 effect9.place(relx=0.6, rely=0.6, anchor=tk.CENTER)
 
 # placement of stopwatch label
