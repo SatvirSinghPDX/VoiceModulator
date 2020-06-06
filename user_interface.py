@@ -57,14 +57,6 @@ def effect1():
     wr.close()
     ww.close()
 
-    ps.playsound('effect1.wav')
-
-    '''if os.path.exists("effect1.wav"):
-        os.remove("effect1.wav")
-        print("effect 1 removed")
-    else:
-        print("The file does not exist")'''
-
 
 def effect2():
     wr = wv.open('output.wav', 'r')
@@ -98,8 +90,6 @@ def effect2():
 
     wr.close()
     ww.close()
-
-    ps.playsound('effect2.wav')
 
 
 def effect3():
@@ -135,8 +125,6 @@ def effect3():
     wr.close()
     ww.close()
 
-    ps.playsound('effect3.wav')
-
 
 def effect4():
     data, fs = sf.read('output.wav')
@@ -151,7 +139,6 @@ def effect4():
 
     print(output)
     sf.write('effect4.wav', output, fs)
-    ps.playsound('effect4.wav')
 
 
 counter = 28800
@@ -181,7 +168,6 @@ def counter_label(label):
 
 # start function of the stopwatch
 
-
 def Start(label):
     global running
     running = True
@@ -191,7 +177,6 @@ def Start(label):
 
 # Stop function of the stopwatch
 
-
 def Stop():
     global running
     startButton['state'] = 'normal'
@@ -199,7 +184,6 @@ def Stop():
     running = False
 
 # Reset function of the stopwatch
-
 
 def Reset(label):
     global counter
@@ -216,10 +200,10 @@ def Reset(label):
 
 # stopwatch label
 
-
 label = tk.Label(app, text="00:00:00", fg="white",
                  font="Verdana 30 bold", bg="black")
 
+# record voice function
 
 def record():
     chunk = 1024
@@ -263,16 +247,12 @@ def record():
     wf.close()
     ps.playsound(filename)
 
-#def startMessage():
-    #print("Started listening...")
 
 def startWrapper():
     Start(label)
     #startMessage()
     #record()
 
-def stopMessage():
-    print("Stopped listening")
 
 '''def stopWrapper():
     Stop()
@@ -280,9 +260,8 @@ def stopMessage():
 
 # creation of start listening, stop listening, and reset buttons
 
-
 startButton = tk.Button(app,
-                        command=lambda: [startWrapper(), record()],
+                        command=lambda: [Start(label), record()],
                         image=startIcon,
                         bg="black",
                         activebackground="black",
@@ -300,13 +279,13 @@ resetButton = tk.Button(app,
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Effect 1", command=effect1)
+effect1 = tk.Button(app, text="Effect 1", command=lambda: [effect1, ps.playsound('effect1.wav')])
 effect1.place(relx=0.4, rely=0.4, anchor=tk.CENTER)
-effect2 = tk.Button(app, text="Effect 2", command=effect2)
+effect2 = tk.Button(app, text="Effect 2", command=lambda: [effect2, ps.playsound('effect2.wav')])
 effect2.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-effect3 = tk.Button(app, text="Effect 3", command=effect3)
+effect3 = tk.Button(app, text="Effect 3", command=lambda: [effect3, ps.playsound('effect3.wav')])
 effect3.place(relx=0.6, rely=0.4, anchor=tk.CENTER)
-effect4 = tk.Button(app, text="Effect 4", command=effect4)
+effect4 = tk.Button(app, text="Effect 4", command=lambda: [effect4, ps.playsound('effect4.wav')])
 effect4.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
 effect5 = tk.Button(app, text="Effect 5")
 effect5.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -328,7 +307,6 @@ label.pack(side=tk.TOP)
 startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 resetButton.pack(side=tk.BOTTOM)
-
 
 
 app.mainloop()
