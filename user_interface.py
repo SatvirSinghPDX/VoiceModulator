@@ -28,9 +28,9 @@ startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
 deleteWavFiles = tk.Button(app,
-                        text='Delete .wav files',
-                        width=15,
-                        command=lambda: remove_files())
+                           text='Delete .wav files',
+                           width=15,
+                           command=lambda: remove_files())
 
 # creation and placement of effect buttons
 
@@ -205,7 +205,7 @@ def effect_4(filename):
     for i in range(0, len(data)):
         output[i] = data[i][0] + gain * data[i - delay_index][0]
 
-    #print(output)
+    # print(output)
     sf.write(effect4_file, output, fs)
 
 
@@ -301,7 +301,7 @@ def reset(label):
 
     # If rest is pressed after pressing stop.
     if not running:
-        #resetButton['state'] = 'disabled'
+        # resetButton['state'] = 'disabled'
         label['text'] = '00:00:00'
 
     # If reset is pressed while the stopwatch is running.
@@ -400,7 +400,6 @@ stopButton = tk.Button(app,
                        activebackground="black",
                        borderwidth=0)
 
-
 # placement of stopwatch label
 
 label.pack(side=tk.TOP)
@@ -411,18 +410,27 @@ startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 deleteWavFiles.pack(side=tk.BOTTOM)
 
-def remove_files():
-    directory = os.getcwd()
 
-    files_in_directory = os.listdir(directory)
-    filtered_files = [file for file in files_in_directory if file.endswith(".wav")]
-    for file in filtered_files:
-        path_to_file = os.path.join(directory, file)
-        os.remove(path_to_file)
+def remove_files():
+    MsgBox = tk.messagebox.askquestion('Delete .wav files', 'Are you sure you want to delte the .wav files in the current directory?',
+                                           icon='warning')
+    if MsgBox == 'yes':
+        directory = os.getcwd()
+
+        files_in_directory = os.listdir(directory)
+        filtered_files = [file for file in files_in_directory if file.endswith(".wav")]
+        for file in filtered_files:
+            path_to_file = os.path.join(directory, file)
+            os.remove(path_to_file)
+    else:
+        tk.messagebox.showinfo('Voice Modulator', 'No .wav files were deleted')
+
+
 
 def on_closing():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         app.destroy()
+
 
 app.protocol("WM_DELETE_WINDOW", on_closing)
 
