@@ -29,8 +29,8 @@ startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
 
-def effect_1():
-    wr = wv.open('output.wav', 'r')
+def effect_1(filename):
+    wr = wv.open(filename, 'r')
     ww = wv.open('effect1.wav', 'w')
 
     par = list(wr.getparams())
@@ -63,8 +63,8 @@ def effect_1():
     ww.close()
 
 
-def effect_2():
-    wr = wv.open('output.wav', 'r')
+def effect_2(filename):
+    wr = wv.open(filename, 'r')
     ww = wv.open('effect2.wav', 'w')
 
     par = list(wr.getparams())
@@ -97,8 +97,8 @@ def effect_2():
     ww.close()
 
 
-def effect_3():
-    wr = wv.open('output.wav', 'r')
+def effect_3(filename):
+    wr = wv.open(filename, 'r')
     ww = wv.open('effect3.wav', 'w')
 
     par = list(wr.getparams())
@@ -131,8 +131,8 @@ def effect_3():
     ww.close()
 
 
-def effect_4():
-    data, fs = sf.read('output.wav')
+def effect_4(filename):
+    data, fs = sf.read(filename)
     delay = .25
     gain = .75
 
@@ -146,12 +146,12 @@ def effect_4():
     sf.write('effect4.wav', output, fs)
 
 
-def effect_5():
+def effect_5(filename):
     CHANNELS = 1
     SWIDTH = 2
     Change_RATE = 3.2
 
-    spf = wv.open('output.wav', 'rb')
+    spf = wv.open(filename, 'rb')
     RATE = spf.getframerate()
     signal = spf.readframes(-1)
 
@@ -163,12 +163,12 @@ def effect_5():
     wf.close()
 
 
-def effect_6():
+def effect_6(filename):
     CHANNELS = 1
     SWIDTH = 2
     Change_RATE = 1.5
 
-    spf = wv.open('output.wav', 'rb')
+    spf = wv.open(filename, 'rb')
     RATE = spf.getframerate()
     signal = spf.readframes(-1)
 
@@ -289,12 +289,12 @@ def record():
     wf.writeframes(b''.join(frames))
     wf.close()
     ps.playsound(filename)
-    effect_1()
-    effect_2()
-    effect_3()
-    effect_4()
-    effect_5()
-    effect_6()
+    effect_1(filename)
+    effect_2(filename)
+    effect_3(filename)
+    effect_4(filename)
+    effect_5(filename)
+    effect_6(filename)
 
 
 # creation of start listening, stop listening, and reset buttons
