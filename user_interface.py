@@ -11,6 +11,7 @@ import numpy as np
 import playsound as ps
 import pyaudio
 import soundfile as sf
+from scipy import signal as sg
 from randomstr import randomstr
 from pydub import AudioSegment
 
@@ -37,13 +38,13 @@ myFont = font.Font(family='Helvetica', size=11, weight='bold')
 
 # creation and placement of effect buttons
 
-effect1 = tk.Button(app, text="Helium 1", width=9, command=lambda: [ps.playsound(effect1_file)])
+effect1 = tk.Button(app, text="Public Place", width=9, command=lambda: [ps.playsound(effect1_file)])
 effect1.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
 effect1['font'] = myFont
 effect2 = tk.Button(app, text="Robot Voice", width=9, command=lambda: [ps.playsound(effect2_file)])
 effect2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 effect2['font'] = myFont
-effect3 = tk.Button(app, text="Helium 3", width=9, command=lambda: [ps.playsound(effect3_file)])
+effect3 = tk.Button(app, text="Helium", width=9, command=lambda: [ps.playsound(effect3_file)])
 effect3.place(relx=0.6, rely=0.5, anchor=tk.CENTER)
 effect3['font'] = myFont
 effect4 = tk.Button(app, text="Echo", width=9, command=lambda: [ps.playsound(effect4_file)])
@@ -58,7 +59,7 @@ effect6['font'] = myFont
 effect7 = tk.Button(app, text="Reverse", width=9, command=lambda: [ps.playsound(effect7_file)])
 effect7.place(relx=0.4, rely=0.7, anchor=tk.CENTER)
 effect7['font'] = myFont
-effect8 = tk.Button(app, text="Effect 8",  width=9)
+effect8 = tk.Button(app, text="Rain",  width=9, command=lambda: [ps.playsound(effect8_file)])
 effect8.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 effect8['font'] = myFont
 effect9 = tk.Button(app, text="Effect 9", width=9)
@@ -86,6 +87,7 @@ effect4_file = ''
 effect5_file = ''
 effect6_file = ''
 effect7_file = ''
+effect8_file = ''
 
 def delete_file(filename):
     if os.path.exists(filename):
@@ -95,114 +97,31 @@ def delete_file(filename):
 
 
 def effect_1(filename):
-    wr = wv.open(filename, 'r')
+    data, fs = sf.read(filename)
+    public, rfs = sf.read('public.wav')
+    output = [0] * len(data)
+    public_len = len(public)
+
+    for i in range(0, len(data)):
+        output[i] = data[i][0] + .25 * public[i % public_len][0]
+
     global effect1_file
     effect1_file = randomstr(length=10) + '.wav'
-    ww = wv.open(effect1_file, 'w')
-
-    par = list(wr.getparams())
-    ww.setparams(par)
-
-    frame_per_sec = wr.getframerate() // 20
-    file_sz = int(wr.getnframes() / frame_per_sec)
-    shift = 100 // 20
-
-    for num in range(file_sz):
-        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
-        left = data[0::2]
-        right = data[1::2]
-        # Take DFT
-        left_freq = np.fft.rfft(left)
-        right_freq = np.fft.rfft(right)
-        # Scale It Up or Down
-        left_freq = np.roll(left_freq, shift)
-        right_freq = np.roll(right_freq, shift)
-        left_freq[0:shift] = 0
-        right_freq[0:shift] = 0
-        # Take inverse DFT
-        left = np.fft.irfft(left_freq)
-        right = np.fft.irfft(right_freq)
-        # Put it altogether
-        sig = np.column_stack((left, right)).ravel().astype(np.int16)
-        ww.writeframes(sig.tostring())
-
-    wr.close()
-    ww.close()
+    sf.write(effect1_file, output, fs)
 
 
 def effect_2(filename):
-    wr = wv.open(filename, 'r')
-
     global effect2_file
     effect2_file = randomstr(length=10) + '.wav'
-    ww = wv.open(effect2_file, 'w')
-
-    par = list(wr.getparams())
-    ww.setparams(par)
-
-    frame_per_sec = wr.getframerate() // 20
-    file_sz = int(wr.getnframes() / frame_per_sec)
-    shift = 1000 // 100
-
-    for num in range(file_sz):
-        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
-        left = data[0::2]
-        right = data[1::2]
-        # Take DFT
-        left_freq = np.fft.rfft(left)
-        right_freq = np.fft.rfft(right)
-        # Scale It Up or Down
-        left_freq = np.roll(left_freq, shift)
-        right_freq = np.roll(right_freq, shift)
-        left_freq[0:shift] = 0
-        right_freq[0:shift] = 0
-        # Take inverse DFT
-        left = np.fft.irfft(left_freq)
-        right = np.fft.irfft(right_freq)
-        # Put it altogether
-        sig = np.column_stack((left, right)).ravel().astype(np.int16)
-        ww.writeframes(sig.tostring())
-
-    wr.close()
-    ww.close()
+    shift = 2500 // 100
+    pitch_shift(filename, effect2_file, shift)
 
 
 def effect_3(filename):
-    wr = wv.open(filename, 'r')
-
     global effect3_file
     effect3_file = randomstr(length=10) + '.wav'
-    ww = wv.open(effect3_file, 'w')
-
-    par = list(wr.getparams())
-    ww.setparams(par)
-
-    frame_per_sec = wr.getframerate() // 20
-    file_sz = int(wr.getnframes() / frame_per_sec)
-    shift = 4000 // 150
-
-    for num in range(file_sz):
-        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
-        left = data[0::2]
-        right = data[1::2]
-        # Take DFT
-        left_freq = np.fft.rfft(left)
-        right_freq = np.fft.rfft(right)
-        # Scale It Up or Down
-        left_freq = np.roll(left_freq, shift)
-        right_freq = np.roll(right_freq, shift)
-        left_freq[0:shift] = 0
-        right_freq[0:shift] = 0
-        # Take inverse DFT
-        left = np.fft.irfft(left_freq)
-        right = np.fft.irfft(right_freq)
-        # Put it altogether
-        sig = np.column_stack((left, right)).ravel().astype(np.int16)
-        ww.writeframes(sig.tostring())
-
-    wr.close()
-    ww.close()
-
+    shift = 6000 // 150
+    pitch_shift(filename, effect3_file, shift)
 
 def effect_4(filename):
     data, fs = sf.read(filename)
@@ -270,6 +189,19 @@ def effect_7(filename):
 
 counter = 28800
 running = False
+
+def effect_8(filename):
+    data, fs = sf.read(filename)
+    rain, rfs = sf.read('rain.wav')
+    output = [0] * len(data)
+    rain_len = len(rain)
+
+    for i in range(0, len(data)):
+        output[i] = data[i][0] + .1 * rain[i % rain_len][0]
+
+    global effect8_file
+    effect8_file = randomstr(length=10) + '.wav'
+    sf.write(effect8_file, output, fs)
 
 
 def counter_label(label):
@@ -397,6 +329,7 @@ def start_record():
     effect_5(filename)
     effect_6(filename)
     effect_7(filename)
+    effect_8(filename)
 
 
 def stop_record():
@@ -431,6 +364,37 @@ startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 deleteWavFiles.pack(side=tk.BOTTOM)
 
+def pitch_shift(filename, output, shift):
+    wr = wv.open(filename, 'r')
+    ww = wv.open(output, 'w')
+
+    par = list(wr.getparams())
+    ww.setparams(par)
+
+    frame_per_sec = wr.getframerate() // 20
+    file_sz = int(wr.getnframes() / frame_per_sec)
+
+    for num in range(file_sz):
+        data = np.fromstring(wr.readframes(frame_per_sec), dtype=np.int16)
+        left = data[0::2]
+        right = data[1::2]
+        # Take DFT
+        left_freq = np.fft.rfft(left)
+        right_freq = np.fft.rfft(right)
+        # Scale It Up or Down
+        left_freq = np.roll(left_freq, shift)
+        right_freq = np.roll(right_freq, shift)
+        left_freq[0:shift] = 0
+        right_freq[0:shift] = 0
+        # Take inverse DFT
+        left = np.fft.irfft(left_freq)
+        right = np.fft.irfft(right_freq)
+        # Put it altogether
+        sig = np.column_stack((left, right)).ravel().astype(np.int16)
+        ww.writeframes(sig)
+
+    wr.close()
+    ww.close()
 
 def remove_files():
     MsgBox = tk.messagebox.askquestion('Delete .wav files', 'Are you sure you want to delte the .wav files in the current directory?',
@@ -439,7 +403,7 @@ def remove_files():
         directory = os.getcwd()
 
         files_in_directory = os.listdir(directory)
-        filtered_files = [file for file in files_in_directory if file.endswith(".wav")]
+        filtered_files = [file for file in files_in_directory if file.endswith(".wav") and file != 'public.wav' and file != 'rain.wav']
         for file in filtered_files:
             path_to_file = os.path.join(directory, file)
             os.remove(path_to_file)
