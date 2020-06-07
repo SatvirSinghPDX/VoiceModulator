@@ -28,6 +28,8 @@ app.configure(bg='black')
 startIcon = PhotoImage(file="mic.png")
 stopIcon = PhotoImage(file="stop.png")
 
+# function that deletes generated .wav files
+
 deleteWavFiles = tk.Button(app,
                            text='Delete .wav files',
                            width=15,
@@ -37,7 +39,8 @@ myFont = font.Font(family='Helvetica', size=11, weight='bold')
 
 # creation and placement of effect buttons
 
-public_place_button = tk.Button(app, text="Public Place", width=9, command=lambda: [ps.playsound(public_place_effect_file)])
+public_place_button = tk.Button(app, text="Public Place", width=9,
+                                command=lambda: [ps.playsound(public_place_effect_file)])
 public_place_button.place(relx=0.4, rely=0.5, anchor=tk.CENTER)
 public_place_button['font'] = myFont
 robot_button = tk.Button(app, text="Robot Voice", width=9, command=lambda: [ps.playsound(robot_effect_file)])
@@ -58,10 +61,10 @@ slowmo_button['font'] = myFont
 reverse_button = tk.Button(app, text="Reverse", width=9, command=lambda: [ps.playsound(reverse_effect_file)])
 reverse_button.place(relx=0.4, rely=0.7, anchor=tk.CENTER)
 reverse_button['font'] = myFont
-rain_button = tk.Button(app, text="Rain",  width=9, command=lambda: [ps.playsound(rain_effect_file)])
+rain_button = tk.Button(app, text="Rain", width=9, command=lambda: [ps.playsound(rain_effect_file)])
 rain_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 rain_button['font'] = myFont
-regular_button = tk.Button(app, text="Regular", width=9, command=lambda: [ps.playsound(regular_effect_file)])
+regular_button = tk.Button(app, text="No effect", width=9, command=lambda: [ps.playsound(regular_effect_file)])
 regular_button.place(relx=0.6, rely=0.7, anchor=tk.CENTER)
 regular_button['font'] = myFont
 
@@ -89,12 +92,15 @@ reverse_effect_file = ''
 rain_effect_file = ''
 regular_effect_file = ''
 
+
 def delete_file(filename):
     if os.path.exists(filename):
         os.remove(filename)
     else:
         print(filename + ' DNE')
 
+
+# public effect
 
 def public_effect(filename):
     data, fs = sf.read(filename)
@@ -110,6 +116,8 @@ def public_effect(filename):
     sf.write(public_place_effect_file, output, fs)
 
 
+# robot effect
+
 def robot_effect(filename):
     global robot_effect_file
     robot_effect_file = randomstr(length=10) + '.wav'
@@ -117,11 +125,16 @@ def robot_effect(filename):
     pitch_shift(filename, robot_effect_file, shift)
 
 
+# helium effect
+
 def helium_effect(filename):
     global helium_effect_file
     helium_effect_file = randomstr(length=10) + '.wav'
     shift = 6000 // 150
     pitch_shift(filename, helium_effect_file, shift)
+
+
+# echo effect
 
 def echo_effect(filename):
     data, fs = sf.read(filename)
@@ -139,6 +152,8 @@ def echo_effect(filename):
     # print(output)
     sf.write(echo_effect_file, output, fs)
 
+
+# chipmunk effect
 
 def chipmunk_effect(filename):
     CHANNELS = 1
@@ -160,6 +175,8 @@ def chipmunk_effect(filename):
     wf.close()
 
 
+# slow motion effect
+
 def slowmo_effect(filename):
     CHANNELS = 1
     SWIDTH = 2
@@ -179,6 +196,8 @@ def slowmo_effect(filename):
     wf.close()
 
 
+# reverse audio effect
+
 def reverse_effect(filename):
     loop = AudioSegment.from_wav(filename)
     reversed = loop.reverse()
@@ -189,6 +208,9 @@ def reverse_effect(filename):
 
 counter = 28800
 running = False
+
+
+# rain effect
 
 def rain_effect(filename):
     data, fs = sf.read(filename)
@@ -203,6 +225,8 @@ def rain_effect(filename):
     rain_effect_file = randomstr(length=10) + '.wav'
     sf.write(rain_effect_file, output, fs)
 
+
+# label that holds the timer
 
 def counter_label(label):
     def count():
@@ -322,7 +346,7 @@ def start_record():
     regular_button['state'] = 'normal'
     # play the recorded audio
     ps.playsound(filename)
-    
+
     regular_effect_file = filename
     public_effect(filename)
     robot_effect(filename)
@@ -366,6 +390,7 @@ startButton.pack(side=tk.LEFT)
 stopButton.pack(side=tk.RIGHT)
 deleteWavFiles.pack(side=tk.BOTTOM)
 
+
 def pitch_shift(filename, output, shift):
     wr = wv.open(filename, 'r')
     ww = wv.open(output, 'w')
@@ -398,20 +423,22 @@ def pitch_shift(filename, output, shift):
     wr.close()
     ww.close()
 
+
 def remove_files():
-    MsgBox = tk.messagebox.askquestion('Delete .wav files', 'Are you sure you want to delte the .wav files in the current directory?',
-                                           icon='warning')
+    MsgBox = tk.messagebox.askquestion('Delete .wav files',
+                                       'Are you sure you want to delte the .wav files in the current directory?',
+                                       icon='warning')
     if MsgBox == 'yes':
         directory = os.getcwd()
 
         files_in_directory = os.listdir(directory)
-        filtered_files = [file for file in files_in_directory if file.endswith(".wav") and file != 'public.wav' and file != 'rain.wav']
+        filtered_files = [file for file in files_in_directory if
+                          file.endswith(".wav") and file != 'public.wav' and file != 'rain.wav']
         for file in filtered_files:
             path_to_file = os.path.join(directory, file)
             os.remove(path_to_file)
     else:
         tk.messagebox.showinfo('Voice Modulator', 'No .wav files were deleted')
-
 
 
 def on_closing():
