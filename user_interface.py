@@ -426,7 +426,7 @@ def pitch_shift(filename, output, shift):
 
 def remove_files():
     MsgBox = tk.messagebox.askquestion('Delete .wav files',
-                                       'Are you sure you want to delte the .wav files in the current directory?',
+                                       'Are you sure you want to delete the .wav files in the current directory?',
                                        icon='warning')
     if MsgBox == 'yes':
         directory = os.getcwd()
