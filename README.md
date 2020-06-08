@@ -15,7 +15,9 @@ The available effects are:
   * An effect to make it sound like the user is in a public place
   
 ## Launch and Use
-To launch the VoiceModulator ....  
+To launch the VoiceModulator run user_interface.py.  
+VoiceModulator was built using a python 3.8 interpreter.  
+Use command pyhton3 user_interface.py to run from terminal.  
 
 
 To record using the VoiceModulator press the Mic button on the left.  
