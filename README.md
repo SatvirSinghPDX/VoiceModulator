@@ -32,16 +32,20 @@ Testing was done manually. For testing both authors would try recording at diffe
 The shortest recording tested was 1 second and the longest was one minute.  
 ## Project Discussion
 ### What Worked
-
+The echo, rain and public place effect all worked by overlaying other audio to the recording. This went smoothly and was simple to implement once understood.  
+The slowmo and chimpunk effects used change in rates of the recording, which was implemented using the wave audio librabry.  
+The pitch shifting was more complicated and took awhile to figure out. This resulted in a product that does have some artifacts in the effect recording. But it does work.  
 ### What Didn't Work
-
+We were unable to get the effects to work in realtime. This was a frusturation that we didn't overcome.  
+The other issue we had was rewriting the named files. To get around this we generated random 10 char strings for the filenames which is a little hacky.
 ### Project Satisfaction
-
+We are somewhat satisified with the project. We felt our implementaion of the effects was well done. However we didn't meet our original project goal of having a live effect to the input. This was the aspect of the project we were most dissapointed about.
 ### Future Improvements
 
 ## Sources:
   - Referenced for timer functionality: https://www.geeksforgeeks.org/create-stopwatch-using-python/  
   - Referenced for pitch shift functionality: https://stackoverflow.com/questions/43963982/python-change-pitch-of-wav-file  
+  - Referenced for overlay effects: https://medium.com/better-programming/simple-audio-processing-in-python-with-pydub-c3a217dabf11
   
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
