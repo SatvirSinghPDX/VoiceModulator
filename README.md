@@ -20,8 +20,10 @@ VoiceModulator was built using a python 3.8 interpreter.
 Use command pyhton3 user_interface.py to run from terminal.  
 
 ## How To Use
-To record using the VoiceModulator press the Mic button on the left.  
+To record using the VoiceModulator press the Mic button on the left.   
+![Image](https://github.com/SatvirSinghPDX/VoiceModulator/blob/master/mic.png?raw=true)   
 To finish recording hit the Stop button on the right.  
+![Image](https://github.com/SatvirSinghPDX/VoiceModulator/blob/master/stop.png?raw=true)  
 Once recording is finished press any of the effect buttons to hear the recording with the desired effect applied.  
 This process can be repeated for as many recordings as the user wants, however only the most recent recording will be played.  
   
