@@ -24,7 +24,8 @@ Once recording is finished press any of the effect buttons to hear the recording
 This process can be repeated for as many recordings as the user wants, however only the most recent recording will be played.  
   
 ## Testing
-
+Testing was done manually. For testing both authors would try recording at different length and then make sure all of the effects were applied correctly to the recording.  
+The shortest recording tested was 1 second and the longest was one minute.  
 ## Project Discussion
 ### What Worked
 
