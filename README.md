@@ -14,12 +14,12 @@ The available effects are:
   * A slow mo effect
   * An effect to make it sound like the user is in a public place
   
-## Launch and Use
+## Launch
 To launch the VoiceModulator run user_interface.py.  
 VoiceModulator was built using a python 3.8 interpreter.  
 Use command pyhton3 user_interface.py to run from terminal.  
 
-
+## How To Use
 To record using the VoiceModulator press the Mic button on the left.  
 To finish recording hit the Stop button on the right.  
 Once recording is finished press any of the effect buttons to hear the recording with the desired effect applied.  
